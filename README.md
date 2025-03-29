@@ -1,35 +1,47 @@
-# SABR-Pitch-Decay
+# SABR Pitch Decay Research (2024)
 
 ## Overview
+As part of a research initiative for the Society for American Baseball Research (SABR), I developed an analytical pipeline to explore the phenomenon of **pitch decay**—the measurable changes in pitch quality (velocity, movement, spin) as a function of pitcher fatigue, pitch count, or game progression.
 
-This repository contains the code and analysis for our pitch decay project, presented at the SABR Analytics Conference. Titled *"Analyzing Longevity with Pitch Decay: A New Way of Evaluating Pitchers,"* our work investigates how a pitch’s effectiveness diminishes as batters see it repeatedly within a game. We introduce a novel metric—**pitch count (by type) against batter**—to quantify this decay, leveraging Statcast data to provide actionable insights for pitcher management, prospect evaluation, and in-game decision-making.
+## Data Pipeline
+- Utilized the `pybaseball` library to pull **Statcast** data from the 2024 MLB season.
+- Queried pitch-level data spanning from **April 1 to October 1, 2024**.
+- Processed and cleaned data using `pandas`, accounting for time-based inconsistencies and format warnings.
 
-## Project Structure
+## Methodology
+- Parsed `statcast` pitch data and grouped pitches by:
+  - **Pitcher**
+  - **Pitch type**
+  - **Game date**
+  - **Inning and pitch count**
+- Tracked key pitch metrics over time:
+  - `release_speed`
+  - `release_spin_rate`
+  - `pfx_x`, `pfx_z` (horizontal and vertical movement)
+- Calculated **per-game pitch decay curves** and **cumulative season-long decay trends**.
+- Developed **fatigue indicators** by modeling decline in pitch metrics as functions of pitch count, innings pitched, and days rest.
 
-- **`SABR_Pitch_Decay.ipynb`**: The main Jupyter Notebook containing the full analysis, including data loading, cleaning, metric calculations, and visualizations.
-  
-## Key Findings
+## Key Tools & Libraries
+- `pybaseball` – For seamless Statcast data access.
+- `pandas`, `numpy` – For cleaning, transformation, and statistical computation.
+- `matplotlib`, `seaborn` – For exploratory visualizations and decay curve plotting.
 
-- **Pitch Decay is Evident**: Low-RPM (1500-1950) four-seam fastballs exhibit significant decay, reducing pitcher efficiency.
-- **Spin Rate Impacts Decay**: High-RPM fastballs (2400-3000 RPM) show greater resistance to decay, as evidenced by lower wOBA increases.
-- **Case Study - Joey Estes**: Estes’ slider remains consistent with repeated exposure, while his fastball shows high variance, suggesting a potential role as a reliever or secondary-pitch specialist.
-- **Applications**: Pitch decay data can optimize pitching rotations, inform prospect evaluation (e.g., Mark Appel’s low-spin fastball), and guide in-game decisions (e.g., Blake Snell’s 2020 World Series pull).
+## Preliminary Insights
+- Pitchers showed **consistent declines in velocity and spin rate** after ~40 pitches.
+- Off-speed pitches decayed at a slower rate than fastballs, suggesting different fatigue thresholds.
+- Some pitchers demonstrated **resilience to decay**, potentially tied to pitch mix or conditioning.
 
-## Visualizations
+## Next Steps
+- Integrate player-level biomechanical data (where available).
+- Correlate decay patterns with in-game performance (e.g., wOBA allowed, strike rate).
+- Package insights into a public-facing dashboard or SABR abstract submission.
 
-The notebook includes several visualizations to illustrate pitch decay:
-- **Heatmaps**: Display batter adjustments (whiff rate, wOBA, launch angle) as pitch counts increase, highlighting decay patterns.
-- **Line Graphs**: Show wOBA decay by pitch type (e.g., Joey Estes) and spin rate group (four-seam fastballs), emphasizing spin rate’s role.
-- **Box Plots**: Reveal wOBA distribution by pitch type, showcasing consistency and variance (e.g., Estes’ slider vs. fastball).
+## Challenges
+- Long query time for full-season Statcast data (~2.5 hours for April–October).
+- Future warnings due to deprecated datetime conversion methods in `pybaseball`.
 
-## Setup and Installation
-
-### Prerequisites
-- Python 3.7+
-- Google Colab (recommended) or a local Jupyter Notebook environment
-- Git (for cloning the repository)
-
-### Dependencies
-Install the required Python libraries using `pip`:
-```bash
-pip install pybaseball pandas numpy matplotlib seaborn plotly
+## Impact
+This work contributes toward a deeper understanding of **pitcher fatigue modeling**, with applications in:
+- In-game decision-making (e.g., pitching changes)
+- Workload management
+- Injury prevention strategies
